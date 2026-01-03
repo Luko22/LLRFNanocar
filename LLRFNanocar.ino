@@ -232,6 +232,14 @@ void initDrive(int s){
 
 //FUNCTIONS////////////
 void signal(){
+
+  // Turn off motors
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+    delay(200);
+
   digitalWrite(warnLED, HIGH);
   delay(50);
   digitalWrite(warnLED, LOW);
