@@ -32,11 +32,7 @@ int enB = 6;
 int in3 = 8; 
 int in4 = A2; 
 
-//golbal variables for blinking red LED without it having to stop whole codee
-bool warnBlink = false;
-unsigned long lastBlink = 0;
-const unsigned long BLINK_INTERVAL = 100;
-bool ledState = false;
+
 
 void setup() {
   Serial.begin(9600);
@@ -48,13 +44,13 @@ void setup() {
 
   pinMode(warnLED, OUTPUT);
   digitalWrite(warnLED, LOW);
-  delay(100);
+  delay(50);
   digitalWrite(warnLED, HIGH);
-  delay(100);
+  delay(50);
   digitalWrite(warnLED, LOW);
-  delay(100);
+  delay(50);
   digitalWrite(warnLED, HIGH);
-  delay(100);
+  delay(50);
   digitalWrite(warnLED, LOW);
 
 // pins initiation
@@ -71,7 +67,7 @@ void setup() {
     digitalWrite(in4, LOW);
 
     delay(1000);
-    initDrive(60);
+    initDrive(80);
 
 }
 
@@ -86,11 +82,13 @@ void loop() {
     int decLim = 300;
     int incLim = 700;
 
-    int driveD = map(joyposV, decLim, 0, 80, 255);
-    int driveB = map(joyposV, incLim, 1023, 50, 255);
+    float speedLim = 0.5; //50%
 
-    int driveR = map(joyposH, incLim, 0, 50, 150);
-    int driveL = map(joyposH, incLim, 1023, 50, 150);
+    int driveD = map(joyposV, decLim, 0, 80, 255)*speedLim;
+    int driveB = map(joyposV, incLim, 1023, 80, 255)*speedLim;
+
+    int driveR = map(joyposH, incLim, 0, 80, 255)*speedLim;
+    int driveL = map(joyposH, incLim, 1023, 80, 150)*speedLim;
 
     Serial.print(joyposV);
     Serial.print("  |  ");
@@ -170,9 +168,9 @@ void loop() {
     Serial.print(a);
     Serial.println("cm");
 
-    if(a<30 && a>10){ 
+    if(a<40 && a>20){ 
     digitalWrite(warnLED, HIGH);
-    }else if(a<10){
+    }else if(a<20){
       signal();
       
 
@@ -191,17 +189,17 @@ void initDrive(int s){
   analogWrite(enA, s);
   analogWrite(enB, s);
  
-  // motor A CW ^ (forward)
+  // motor A CW ^ (backwards)
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
     // digitalWrite(in1, LOW);
     // digitalWrite(in2, HIGH);
     
-  // motor B CW ^ (forward)
+  // motor B CW ^ (backwards)
     digitalWrite(in3, HIGH);
     digitalWrite(in4, LOW);
 
-    delay(200);
+    delay(100);
 
  // Turn off motors
     digitalWrite(in1, LOW);
@@ -211,13 +209,13 @@ void initDrive(int s){
     delay(500);
 
 
- // motor A CCW (backwards)
+ // motor A CCW (foawrds)
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   // digitalWrite(in1, HIGH);
   // digitalWrite(in2, LOW);
 
-  // motor B CCW (backwards)
+  // motor B CCW (foawrds)
     digitalWrite(in3, LOW);
     digitalWrite(in4, HIGH);
     delay(200);
@@ -234,15 +232,42 @@ void initDrive(int s){
 
 //FUNCTIONS////////////
 void signal(){
-if (!warnBlink) {
-    digitalWrite(warnLED, LOW);
-    return;
-  }
+  digitalWrite(warnLED, HIGH);
+  delay(50);
+  digitalWrite(warnLED, LOW);
+  delay(50);
+  digitalWrite(warnLED, HIGH);
+  delay(50);
+  digitalWrite(warnLED, LOW);
+  delay(50);
+  digitalWrite(warnLED, HIGH);
+  delay(50);
+  digitalWrite(warnLED, LOW);
+  delay(50);
+  digitalWrite(warnLED, HIGH);
+  delay(50);
+  digitalWrite(warnLED, LOW);
+  delay(50);
+  digitalWrite(warnLED, HIGH);
+  delay(50);
+  digitalWrite(warnLED, LOW);
+  delay(50);
+  digitalWrite(warnLED, HIGH);
 
-  if (millis() - lastBlink >= BLINK_INTERVAL) {
-    lastBlink = millis();
-    ledState = !ledState;
-    digitalWrite(warnLED, ledState);
-  }
+  
+  analogWrite(enA, 70);
+  analogWrite(enB, 70);
+ 
+  // motor A CW ^ (backwards)
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    // digitalWrite(in1, LOW);
+    // digitalWrite(in2, HIGH);
+    
+  // motor B CW ^ (backwards)
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+
+    delay(200);
 }
 
