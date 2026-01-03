@@ -1,6 +1,6 @@
-//importing libraries
-#include <SPI.h>
-#include <nRF24L01.h>
+//////////////importing libraries////////////////////////////////
+#include <SPI.h> //communication protocol
+#include <nRF24L01.h> //communication using radio waves to send and recieve data
 #include <RF24.h>
 #include "SR04.h"
 
@@ -32,7 +32,7 @@ int enB = 6;
 int in3 = 8; 
 int in4 = A2; 
 
-//////blinking lights////////////
+//golbal variables for blinking red LED without it having to stop whole codee
 bool warnBlink = false;
 unsigned long lastBlink = 0;
 const unsigned long BLINK_INTERVAL = 100;
@@ -162,8 +162,6 @@ void loop() {
     digitalWrite(in4, HIGH);
     }
 
-
-
 //////////////ULTRASOUND///////////////
     if (millis() - lastUltraRead >= ULTRA_INTERVAL) {
       lastUltraRead = millis();
@@ -176,6 +174,7 @@ void loop() {
     digitalWrite(warnLED, HIGH);
     }else if(a<10){
       signal();
+      
 
     }
     else{
